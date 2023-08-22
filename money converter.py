@@ -1,14 +1,14 @@
 exchange_rates = {
-    'USD': '1.00',
-    'EUR': '0.91',
-    'CNY': '7.22',
-    'JPY': '144.68',
-    'TRY': '27.03',
-    'MXN': '17.00',
-    'BRL': '4.87',
-    'INR': '82.62',
-    'CAD': '1.34',
-    'COP': '3955.00'}
+    'USD': 1.00,
+    'EUR': 0.91,
+    'CNY': 7.22,
+    'JPY': 144.68,
+    'TRY': 27.03,
+    'MXN': 17.00,
+    'BRL': 4.87,
+    'INR': 82.62,
+    'CAD': 1.34,
+    'COP': 3955.00}
 
 
 def convert_currency(amount, from_currency, to_currencies):
@@ -22,7 +22,7 @@ def convert_currency(amount, from_currency, to_currencies):
     """
 
     if from_currency not in exchange_rates or any(currency not in exchange_rates for currency in to_currencies):
-        return "Currency not supported or invalid."
+        return {"error": "Currency not supported or invalid."}
 
     amount_usd = amount / exchange_rates[from_currency]
 
@@ -34,11 +34,15 @@ def convert_currency(amount, from_currency, to_currencies):
     return converted_amounts
 
 
-amount_to_convert = 100
-source_currency = 'USD'
-target_currencies = ['EUR', 'CNY', 'JPY', 'MXN']
+# Get user input
+amount_to_convert = float(input("Enter the amount to convert: "))
+source_currency = (input("Enter the source currency code: ")).upper()
+target_currencies = (input("Enter target currency codes (comma-separated): ")).upper().split(',')
 
 converted_amounts_result = convert_currency(amount_to_convert, source_currency, target_currencies)
 
-for target_currency, converted_amount in converted_amounts_result.items():
-    print(f"{amount_to_convert} {source_currency} is equal to {converted_amount:.2f} {target_currency}.")
+if "error" in converted_amounts_result:
+    print(converted_amounts_result["error"])
+else:
+    for target_currency, converted_amount_result in converted_amounts_result.items():
+        print(f"{amount_to_convert} {source_currency} is equal to {converted_amount_result:.2f} {target_currency}.")
